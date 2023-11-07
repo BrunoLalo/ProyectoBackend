@@ -1,19 +1,17 @@
 import fs from "fs"
+import { nanoid } from 'nanoid'
+
+
 
 class ProductManager {
-    static productId = 0
     constructor() {
-        this.path = '../products.json'
+        this.path = './products.json'
         this.products = []
     }
 
-    
     async addProducts(title, description, price, thumbnail, code, stock) {
-        
-        ProductManager.productId++
-        
+
         let newProduct = {
-            id: ProductManager.productId,
             title: title,
             description: description,
             price: price,
@@ -21,19 +19,26 @@ class ProductManager {
             code: code,
             stock: stock
         }
-        
+
+        newProduct.id = nanoid(1)
+
+        if (this.products.some((product) => product.code === code)) {
+            console.log("El código del producto ya existe");
+            return;
+        }
         this.products.push(newProduct)
-        
+
         await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, 2))
+        return "Agregado"
     }
 
     async getProducts() {
         let respuesta = await fs.promises.readFile(this.path, { encoding: 'utf8' })
-        return(JSON.parse(respuesta))
+        return (JSON.parse(respuesta))
     }
-    
+
     async getProductById(idProduct) {
-        const getId = this.products.find((product) =>  product.id === idProduct )
+        const getId = this.products.find((product) => product.id === idProduct)
 
         if (getId) {
             console.log(getId)
@@ -42,36 +47,42 @@ class ProductManager {
         }
     }
 
-    async updateProduct (id, newData) {
-        let respuesta2 = await this.getProducts
+    async exist(id){
+        let products = await this.getProducts()
+        return products.find(prod => prod.id ===id)
+    }
 
-        const updateId = this.products.findIndex((product) => { return product.id === id})
-        
+    async updateProduct(id, newData) {
+        let respuesta2 = await this.getProducts()
+
+        const updateId = this.products.findIndex((product) => { return product.id === id })
+
         if (updateId !== -1) {
             this.products[updateId] = newData
         } else {
             console.log('Error: not found')
         }
+        return "Producto actualizado"
     }
 
     async deleteProduct(idProduct) {
-        let respuesta3 = await this.getProducts
+        let respuesta3 = await this.getProducts()
 
         const deleteId = this.products.findIndex((product) => { return product.id === idProduct })
 
         if (deleteId !== -1) {
-            this.products.splice(idProduct, 1)
+            this.products.splice(deleteId, 1)
             console.log('Eliminado')
         } else {
             console.log('Error: not found')
         }
+
+        return "Producto eliminado"
     }
-    
+
 }
 
 const manager = new ProductManager()
-
-console.log(manager)
 
 manager.addProducts('producto prueba 1', 'Este es un producto prueba 1', 200, 'Sin imagen', 'abc123', 25)
 manager.addProducts('producto prueba 2', 'Este es un producto prueba 2', 200, 'Sin imagen', 'abc124', 25)
@@ -85,13 +96,5 @@ manager.addProducts('producto prueba 9', 'Este es un producto prueba 9', 200, 'S
 manager.addProducts('producto prueba 10', 'Este es un producto prueba 10', 200, 'Sin imagen', 'abc134', 25)
 
 console.log(manager)
-
-// manager.getProductById(1)
-
-// manager.updateProduct(1, {title:'nuevo nombre'})
-
-// manager.deleteProduct(1)
-
-// console.log(manager)
 
 export default ProductManager
