@@ -20,7 +20,7 @@ class ProductManager {
             stock: stock
         }
 
-        newProduct.id = nanoid(1)
+        newProduct.id = nanoid()
 
         if (this.products.some((product) => product.code === code)) {
             console.log("El código del producto ya existe");

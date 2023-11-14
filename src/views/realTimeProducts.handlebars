@@ -1,0 +1,35 @@
+<div>
+    <h1>LISTA DE PRODUCTOS</h1>
+
+    {{#each}}
+    <h2>{{this.title}}</h2>
+    <p>{{this.description}}</p>
+    <p>{{this.price}}</p>
+    {{/each}}
+
+    <h1>AGREGAR PRODUCTOS</h1>
+
+    <form action="http://localhost:8080/api/products" method="post" enctype="multipart/form-data">
+        <input class="message" type="text" name="name" placeholder="Titulo" {{this.title}}><br />
+        <input class="message" type="text" name="name" placeholder="Descripción" {{this.description}}><br />
+        <input class="message" type="number" name="name" placeholder="Precio" {{this.precio}}><br />
+        <button onclick="sendMsg" type="submit">Agregar</button>
+    </form>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    const socketClient = io()
+    const message = document.getElementsByClassName('message')
+
+    const sendMsg = () => {
+        socketClient.emit('msg', message.value)
+    }
+
+    socketClient.on('confirmation', data => {
+        console.log(data)
+        console.log('Confirmación recibida')
+    })
+
+</script>
