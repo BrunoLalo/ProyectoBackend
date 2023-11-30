@@ -1,13 +1,14 @@
 import { Router } from 'express'
-import ProductManager from '../ProductManager.js'
+import ProductManager from '../dao/controllers/ProductManager.fs.js'
 
 
 const router = Router()
 const manager = new ProductManager()
 
 
-router.get("/", async (req, res) =>{
-    let allProducts = await manager.getProducts()
+router.get("/", async (req, res) => {
+    const allProducts = await manager.getProducts()
+    // res.render("index")
     res.render("index", {
         title: "Express",
         products: allProducts
@@ -16,7 +17,7 @@ router.get("/", async (req, res) =>{
 
 router.get('/realtimeproducts', async (req, res) => {
     res.render('realTimeProducts', {
-        title : "Productos en Tiempo Real"
+        title: "Productos en Tiempo Real"
     })
 })
 

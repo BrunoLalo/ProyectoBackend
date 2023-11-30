@@ -6,7 +6,7 @@
     "thumbnail": "Sin imagen",
     "code": "abc123",
     "stock": 25,
-    "id": "4rTaFyDE9LwPv9RuH0T2T"
+    "id": "Eg5FAYPQqJYMYElnzApJb"
   },
   {
     "title": "producto prueba 2",
@@ -15,7 +15,7 @@
     "thumbnail": "Sin imagen",
     "code": "abc124",
     "stock": 25,
-    "id": "WtEnIVk4IsijZIkffV1R8"
+    "id": "VuKyFZWLN_zd2WLRehN9P"
   },
   {
     "title": "producto prueba 3",
@@ -24,7 +24,7 @@
     "thumbnail": "Sin imagen",
     "code": "abc125",
     "stock": 25,
-    "id": "M9AHN4Xhw0R17vGHg9-c_"
+    "id": "2bNMsg0tQ-PXI1a7Y9R0Y"
   },
   {
     "title": "producto prueba 4",
@@ -33,7 +33,7 @@
     "thumbnail": "Sin imagen",
     "code": "abc126",
     "stock": 25,
-    "id": "kWT00KmWxr0oA6McXLtr4"
+    "id": "CcmVlGD-ijQ1BNUAfGkKy"
   },
   {
     "title": "producto prueba 5",
@@ -42,7 +42,7 @@
     "thumbnail": "Sin imagen",
     "code": "abc127",
     "stock": 25,
-    "id": "Qj7m3pv_9P1en3PFs9r4N"
+    "id": "XjePjEcSPfenGVorOibew"
   },
   {
     "title": "producto prueba 6",
@@ -51,7 +51,7 @@
     "thumbnail": "Sin imagen",
     "code": "abc128",
     "stock": 25,
-    "id": "ouVicHizegiUMx7Wf-wl_"
+    "id": "weZvuZS-Rm9VZoP2QfMiZ"
   },
   {
     "title": "producto prueba 7",
@@ -60,7 +60,7 @@
     "thumbnail": "Sin imagen",
     "code": "abc129",
     "stock": 25,
-    "id": "X1mJJ5XHBSD7Fj2KmNrN9"
+    "id": "WloNlewCttHsvlY0OQm2l"
   },
   {
     "title": "producto prueba 8",
@@ -69,7 +69,7 @@
     "thumbnail": "Sin imagen",
     "code": "abc131",
     "stock": 25,
-    "id": "XDFVIe7sJQyoYzwAg30yQ"
+    "id": "puYJgKT8hJNZdQI444bcm"
   },
   {
     "title": "producto prueba 9",
@@ -78,15 +78,15 @@
     "thumbnail": "Sin imagen",
     "code": "abc132",
     "stock": 25,
-    "id": "m4wvRDzyjYEWTy9b5WRcH"
-  }
-]  {
+    "id": "8DoPsXbjInVZMiF0EkepP"
+  },
+  {
     "title": "producto prueba 10",
     "description": "Este es un producto prueba 10",
     "price": 200,
     "thumbnail": "Sin imagen",
     "code": "abc134",
     "stock": 25,
-    "id": "FdIVZ8zAWb-vtjILqA7Jj"
+    "id": "QAk5SS9Gqe4kCFrDkisHa"
   }
 ]

@@ -1,10 +1,25 @@
 import { Router } from 'express'
-import ProductManager from '../ProductManager.js'
+import ProductManager from '../dao/controllers/ProductManager.fs.js'
+import ProductController from '../dao/controllers/product.controller.mdb.js'
 
 
 const manager = new ProductManager()
+const controller = new ProductController()
 
 const productRouter = Router()
+
+productRouter.get('/mdb', async (req, res) => {
+    const limit = parseInt(req.query.limit)
+
+    if(!limit){
+        return res.send(await controller.getProducts())
+    }
+
+    const allProducts = await controller.getProducts()
+    const productslimit = allProducts.slice(0, limit)
+
+    res.status(200).send(productslimit)
+})
 
 productRouter.get('/', async (req, res) => {
     const limit = parseInt(req.query.limit)

@@ -1,11 +1,9 @@
 import fs from "fs"
 import { nanoid } from 'nanoid'
 
-
-
 class ProductManager {
     constructor() {
-        this.path = './products.json'
+        this.path = `./src/products.json`
         this.products = []
     }
 
@@ -28,12 +26,12 @@ class ProductManager {
         }
         this.products.push(newProduct)
 
-        await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, 2))
-        return "Agregado"
+        // await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, 2))
+        // return "Agregado"
     }
 
     async getProducts() {
-        let respuesta = await fs.promises.readFile(this.path, { encoding: 'utf8' })
+        const respuesta = await fs.promises.readFile(this.path, { encoding: 'utf8' })
         return (JSON.parse(respuesta))
     }
 
@@ -48,14 +46,14 @@ class ProductManager {
     }
 
     async exist(id){
-        let products = await this.getProducts()
+        const products = await this.getProducts()
         return products.find(prod => prod.id ===id)
     }
 
     async updateProduct(id, newData) {
-        let respuesta2 = await this.getProducts()
+        const respuesta2 = await this.getProducts()
 
-        const updateId = this.products.findIndex((product) => { return product.id === id })
+        const updateId = this.respuesta2.findIndex((product) => { return product.id === id })
 
         if (updateId !== -1) {
             this.products[updateId] = newData
@@ -66,9 +64,9 @@ class ProductManager {
     }
 
     async deleteProduct(idProduct) {
-        let respuesta3 = await this.getProducts()
+        const respuesta3 = await this.getProducts()
 
-        const deleteId = this.products.findIndex((product) => { return product.id === idProduct })
+        const deleteId = this.respuesta3.findIndex((product) => { return product.id === idProduct })
 
         if (deleteId !== -1) {
             this.products.splice(deleteId, 1)
@@ -94,7 +92,5 @@ manager.addProducts('producto prueba 7', 'Este es un producto prueba 7', 200, 'S
 manager.addProducts('producto prueba 8', 'Este es un producto prueba 8', 200, 'Sin imagen', 'abc131', 25)
 manager.addProducts('producto prueba 9', 'Este es un producto prueba 9', 200, 'Sin imagen', 'abc132', 25)
 manager.addProducts('producto prueba 10', 'Este es un producto prueba 10', 200, 'Sin imagen', 'abc134', 25)
-
-console.log(manager)
 
 export default ProductManager

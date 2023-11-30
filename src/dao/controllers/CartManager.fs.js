@@ -1,12 +1,12 @@
 import fs from "fs"
 import { nanoid } from 'nanoid'
-import ProductManager from './ProductManager.js'
+import ProductManager from './ProductManager.fs.js'
 
 const productALL = new ProductManager 
 
 class CartManager{
     constructor(){
-        this.path = "./cart.json"
+        this.path = "./src/cart.json"
         this.cart = []
     }
 
