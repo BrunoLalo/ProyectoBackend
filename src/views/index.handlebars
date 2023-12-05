@@ -1,8 +1,7 @@
 <h1>LISTA DE PRODUCTOS</h1>
 
-{{#each allProducts}}
-<h2>{{allProducts.title}}</h2>
- <p>{{allProducts.description}}</p>
-<p>{{allProducts.price}}</p>
-<p>{{allProducts.thumbnail}}</p> 
-{{/each}}
+<ul>
+    {{#each allProducts}}
+    <li>{{this.title}} ({{this.price}})</li>
+    {{/each}}
+</ul>

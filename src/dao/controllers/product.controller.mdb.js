@@ -7,7 +7,7 @@ export default class ProductController {
 
     async addProducts(title, description, price, thumbnail, code, stock) {
 
-        let newProduct = {
+        const newProduct = {
             title: title,
             description: description,
             price: price,
@@ -42,3 +42,4 @@ export default class ProductController {
     }
 
 }
+

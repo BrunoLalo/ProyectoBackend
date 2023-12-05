@@ -9,6 +9,7 @@ import cartRouter from './router/cart.routes.js'
 import viewRouter from './router/views.routes.js'
 import { __dirname } from './utils.js'
 import ProductManager from './dao/controllers/ProductManager.fs.js'
+import messagesModel from './dao/controllers/models/message.model.js';
 
 const app = express()
 const PORT = 8080
@@ -19,7 +20,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 // app.use("/", express.static(__dirname + "public"))
-app.use(express.static(__dirname + "public"))
+app.use('/static', express.static(`${__dirname}/public`))
 
 
 app.use("/", viewRouter)
@@ -39,21 +40,34 @@ const httpServer = app.listen(PORT, () => {
     console.log(`Servidor express activo en puerto ${PORT}`)
 })
 
-const socketServer = new Server(httpServer)
+const messages = []
+
+const socketServer = new Server(httpServer, {
+    cors: {
+        origin: "*",
+        methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
+        credentials: false
+    } 
+})
 
 socketServer.on('connection', socket => {
-    console.log("CLIENTE CONECTADO")
+    socket.on('message', data => {
+        messages.push(data)
 
-    socket.on('msg', data => {
-        console.log(data)
-
-        manager.addProducts(data)
-
-        socketServer.emit('confirmation', 'Confirmado')
-
+        socketServer.emit('messageLogs', messages)
     })
-
+    
+    
 })
+
+// socketServer.on('connection', socket => {
+//     console.log("CLIENTE CONECTADO")
+//     socket.on('msg', data => {
+//         console.log(data)
+//         manager.addProducts(data)
+//         socketServer.emit('confirmation', 'Confirmado')
+//     })
+// })
 
 
 try {

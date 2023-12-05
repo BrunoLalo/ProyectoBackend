@@ -48,7 +48,7 @@ productRouter.get('/:pid', async(req, res) => {
 })
 
 productRouter.post("/", async (req, res)=>{
-    let newproduct = req.body
+    const newproduct = req.body
     res.status(200).send(await manager.addProducts(newproduct))
 })
 
