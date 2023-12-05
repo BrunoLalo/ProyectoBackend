@@ -9,7 +9,6 @@ import cartRouter from './router/cart.routes.js'
 import viewRouter from './router/views.routes.js'
 import { __dirname } from './utils.js'
 import ProductManager from './dao/controllers/ProductManager.fs.js'
-import messagesModel from './dao/controllers/models/message.model.js';
 
 const app = express()
 const PORT = 8080

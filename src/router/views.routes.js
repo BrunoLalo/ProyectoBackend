@@ -1,13 +1,13 @@
 import { Router } from 'express'
-import productModel from '../dao/controllers/models/product.model.js'
+import ProductController from '../dao/controllers/product.controller.mdb.js'
 import messageModel from '../dao/controllers/models/message.model.js'
 
 
 const router = Router()
-
+const controller = new ProductController()
 
 router.get("/", async (req, res) => {
-    const allProducts = await productModel.find()
+    const allProducts = await controller.getProducts()
     res.render("index", {
         title: "Express",
         products: allProducts
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 })
 
 router.get('/realtimeproducts', async (req, res) => {
-    const allProducts = await productModel.find()
+    const allProducts = await controller.getProducts()
 
     res.render('realTimeProducts', {
         title: "Productos en Tiempo Real",
@@ -41,7 +41,7 @@ router.post('/chat', async (req, res) => {
         user: user,
         message: message
     }
-    const result = await messageModel.insertMany(newMessage)
+    const result = await messageModel.create(newMessage)
 
     res.status(200).send({ status: 'OK', data: result })
 })

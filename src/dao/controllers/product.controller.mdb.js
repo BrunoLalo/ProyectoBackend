@@ -22,8 +22,13 @@ export default class ProductController {
     }
 
     async getProducts() {
-        const respuesta = await productModel.find().lean()
-        return respuesta
+        try {
+            const products = await productModel.find().lean()
+            return products
+        } catch (err) {
+            return err.message
+        }
+        
     }
 
     async getProductById(id) {
