@@ -1,4 +1,4 @@
-import productModel from './models/product.model.js'
+import productModel from '../models/product.model.js'
 
 
 export default class ProductController {
@@ -48,3 +48,6 @@ export default class ProductController {
 
 }
 
+// const manager = new ProductController()
+
+// manager.addProducts('producto prueba 11', 'Este es un producto prueba 1', 200, 'Sin imagen', 'abc123', 25)

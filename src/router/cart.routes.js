@@ -1,28 +1,84 @@
 import { Router } from 'express'
-import CartManager from '../dao/controllers/CartManager.fs.js'
+import CartController from '../dao/controllers/cart.controller.mdb.js'
 
 const cartRouter = Router()
-const cart = new CartManager
-
-cartRouter.post("/", async (req, res) => {
-    res.status(200).send(await cart.addCart())
-})
+const cart = new CartController()
 
 cartRouter.get('/', async (req, res) => {
     res.status(200).send(cart.readCart())
 })
 
 cartRouter.get('/:cid', async (req, res) => {
-    res.status(200).send(await cart.getCartById(req.params.id))
+    res.status(200).send(await cart.getCartById(req.params.cid))
 })
 
-cartRouter.post('/:cid/products/pid', async (req,res) => {
-    let cartId = req.params.cid
-    let productId = req.params.pid
+cartRouter.post('/', async (req, res) => {
 
-    res.status(200).send(await cart.addProductInCart(cartId, productId))
+    const products_array = req.body;
+
+    if (!Array.isArray(products_array.products)) {
+        res.status(400).send({ status: 'ERR', message: 'No se pudo agregar' });
+    } else {
+        const process = await cart.addCart(products_array);
+        res.status(200).send({ status: 'OK', data: process });
+    }
 })
 
+cartRouter.post('/:cid/products/:pid/:qty', async (req, res) => {
+    await cart.updateProductQty(req.params.cid, req.params.pid, req.params.qty);
+
+    if (cart.checkStatus() === 1) {
+        res.status(200).send({ status: 'OK', msg: 'Cantidad de producto actualizada' });
+    } else {
+        res.status(400).send({ status: 'ERR', error: 'No se pudo actualizar cantidad de producto' });
+    }
+})
+
+
+cartRouter.put('/:cid', async (req, res) => {
+    const product = req.body;
+    await cart.updateCart(req.params.cid, product);
+
+    if (cart.checkStatus() === 1) {
+        res.status(200).send({ status: 'OK', msg: 'Producto agregado al carrito' });
+    } else {
+        res.status(400).send({ status: 'ERR', error: 'No se pudo agregar el producto al carrito' });
+    }
+})
+
+cartRouter.put('/:cid/products/:pid/:qty', async (req, res) => {
+    await cart.updateProductCant(req.params.id, req.params.pid, req.params.qty);
+
+    if (cart.checkStatus() === 1) {
+        res.status(200).send({ status: 'OK', msg: 'Cantidad de producto actualizada' });
+    } else {
+        res.status(400).send({ status: 'ERR', error: 'No se pudo actualizar cantidad de producto.' });
+    }
+
+    const updateProductCant = await cart.updateProductCant(req.params.cid, req.params.pid, req.body)
+    res.status(200).send(updateProductCant)
+
+})
+
+cartRouter.delete('/:cid', async (req, res) => {
+        await cart.emptyCart(req.params.cid);
+
+        if (cart.checkStatus() === 1) {
+            res.status(200).send({ status: 'OK', msg: 'Carrito Vaciado' });
+        } else {
+            res.status(400).send({ status: 'ERR', error: 'No se pudo vaciar el carrito.' });
+        }
+});
+
+cartRouter.delete('/:cid/products/:pid', async (req, res) => {
+        await cart.deleteCartProduct(req.params.cid, req.params.pid);
+
+        if (cart.checkStatus() === 1) {
+            res.status(200).send({ status: 'OK', msg: 'Producto quitado del carrito' });
+        } else {
+            res.status(400).send({ status: 'ERR', error: 'No se pudo quitar el producto en el carrito.' });
+        }
+});
 
 
 export default cartRouter
