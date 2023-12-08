@@ -5,21 +5,11 @@ export default class ProductController {
     constructor() {
     }
 
-    async addProducts(title, description, price, thumbnail, code, stock) {
-
-        const newProduct = {
-            title: title,
-            description: description,
-            price: price,
-            thumbnail: thumbnail,
-            code: code,
-            stock: stock
-        }
-
-        await productModel.create(newProduct)
-
-        return 'Agregado'
+    async addProducts(product) {
+        await productModel.create(product)
+        return "Producto agregado"
     }
+
 
     async getProducts() {
         try {
@@ -28,7 +18,7 @@ export default class ProductController {
         } catch (err) {
             return err.message
         }
-        
+
     }
 
     async getProductById(id) {
@@ -48,6 +38,16 @@ export default class ProductController {
 
 }
 
-// const manager = new ProductController()
+const manager = new ProductController()
 
-// manager.addProducts('producto prueba 11', 'Este es un producto prueba 1', 200, 'Sin imagen', 'abc123', 25)
+
+const newProduct = {
+    title: 'producto prueba 1',
+    description: 'Este es un producto prueba 1',
+    price: 200,
+    thumbnail: 'Sin imagen',
+    code: 'abc123',
+    stock: 25
+}
+
+manager.addProducts(newProduct)

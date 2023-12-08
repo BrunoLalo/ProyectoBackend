@@ -12,8 +12,8 @@ import ProductManager from './dao/controllers/ProductManager.fs.js'
 
 const app = express()
 const PORT = 8080
-const MONGOOSE_URL = 'mongodb://127.0.0.1:27017/Proyecto-back'
-//const MONGOOSE_URL = 'mongodb+srv://lalomiabruno:<lalomiabruno>@cluster0.oqofsvd.mongodb.net/ecommerce'
+//const MONGOOSE_URL = 'mongodb://127.0.0.1:27017/Proyecto-back'
+const MONGOOSE_URL = 'mongodb+srv://lalomiabruno:lalomiabruno@cluster0.oqofsvd.mongodb.net/ecommerce'
 const manager = new ProductManager()
 
 app.use(express.urlencoded({ extended: true }))
