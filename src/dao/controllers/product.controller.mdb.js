@@ -10,29 +10,28 @@ export default class ProductController {
         return "Producto agregado"
     }
 
-    async getProducts() {
-        try {
-            const products = await productModel.find().lean()
-            return products
-        } catch (err) {
-            return err.message
-        }
-
-    }
-    // async getProducts(page, query, sort) {
+    // async getProducts() {
     //     try {
-            
-    //         const products = await productModel.aggregate([
-    //             {$match: {page: page}},
-    //             {$match: {type: query}},
-    //             {$match: {price: sort}}
-    //         ])
+    //         const products = await productModel.find().lean()
     //         return products
+    //     } catch (err) {
+    //         return err.message
     //     }
-    //      catch (error) {
-    //         return error.message
-    //     }
+
     // }
+    async getProducts(page, query, sort) {
+        try {     
+            const products = await productModel.aggregate([
+                {$match: {page: page}},
+                {$match: {type: query}},
+                {$match: {price: sort}}
+            ])
+            return products
+        }
+         catch (error) {
+            return error.message
+        }
+    }
 
     async getProductById(id) {
         const product = await productModel.findById(id)
