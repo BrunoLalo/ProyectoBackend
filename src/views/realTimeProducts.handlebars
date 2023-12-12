@@ -1,18 +1,22 @@
 <div>
     <h1>LISTA DE PRODUCTOS</h1>
 
-<ul>
-    {{#each allProducts}}
-    <li>{{this.title}} ({{this.price}})</li>
-    {{/each}}
-</ul>
+    <ul>
+        {{#each products}}
+        <li> {{this.title}} {{this.price}} ({{this.description}})</li>
+        {{/each}}
+    </ul>
     <h1>AGREGAR PRODUCTOS</h1>
 
     <form action="http://localhost:8080/api/products" method="post" enctype="multipart/form-data">
         <input class="message" type="text" name="name" placeholder="Titulo" {{this.title}}><br />
         <input class="message" type="text" name="name" placeholder="Descripción" {{this.description}}><br />
         <input class="message" type="number" name="name" placeholder="Precio" {{this.precio}}><br />
-        <button onclick="sendMsg()" type="submit">Agregar</button>
+        <input class="message" type="text" name="name" placeholder="Imagen" {{this.thumbnail}}><br />
+        <input class="message" type="text" name="name" placeholder="Código" {{this.code}}><br />
+        <input class="message" type="number" name="name" placeholder="Stock" {{this.stock}}><br />
+
+        <button onclick= "sendMsg()" type="submit">Agregar</button>
     </form>
 </div>
 

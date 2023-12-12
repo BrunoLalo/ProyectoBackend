@@ -1,7 +1,34 @@
-<h1>LISTA DE PRODUCTOS</h1>
+{{!-- <h1>LISTA DE PRODUCTOS</h1>
 
 <ul>
-    {{#each allProducts}}
-        <li> {{this.price}} {{this.title}} ({{this.description}})</li>
+    {{#each products}}
+    <li> {{this.title}} {{this.price}} ({{this.description}})</li>
     {{/each}}
-</ul>
+</ul> --}}
+<div class="row justify-content-center">
+
+    <h1>LISTA DE PRODUCTOS</h1>
+    
+    <div class="col-md-4 col-xs-12 p-3" style="background-color: #e1e1e1;">
+        {{#each products}}
+        <div class="card mb-4">
+
+            <div class="prod-body">
+                <h5 class="prod-title">{{this.title}}</h5>
+                <p class="prod-text">{{this.description}}</p>
+                <p class="prod-price">{{this.price}}</p>
+                <div style="width: 100%; text-align: right;">
+                    <button class="btn btn-success" onclick="agregar()"><i class="fas fa-cart-plus"></i> Agregar al
+                        carrito</button>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<script>
+    const agregar = () => {
+        console.log("Agregado")
+    }
+</script>

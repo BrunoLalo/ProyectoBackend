@@ -64,9 +64,9 @@ export default class CartController {
         }
     }
 
-    readCart = async () => {
+    getCart = async () => {
         try {
-            const carts = await cartModel.find()
+            const carts = await cartModel.find().lean()
             this.status = 1;
             this.statusMsg = 'Carritos recuperados'
             return carts;

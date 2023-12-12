@@ -5,7 +5,7 @@ const cartRouter = Router()
 const cart = new CartController()
 
 cartRouter.get('/', async (req, res) => {
-    res.status(200).send(cart.readCart())
+    res.status(200).send(cart.getCart())
 })
 
 cartRouter.get('/:cid', async (req, res) => {
@@ -25,7 +25,7 @@ cartRouter.post('/', async (req, res) => {
 })
 
 cartRouter.post('/:cid/products/:pid/:qty', async (req, res) => {
-    await cart.updateProductQty(req.params.cid, req.params.pid, req.params.qty);
+    await cart.updateProductCant(req.params.cid, req.params.pid, req.params.qty);
 
     if (cart.checkStatus() === 1) {
         res.status(200).send({ status: 'OK', msg: 'Cantidad de producto actualizada' });
