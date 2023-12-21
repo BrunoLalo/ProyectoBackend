@@ -2,10 +2,14 @@ import express from 'express'
 import handlebars from "express-handlebars";
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
+import session from 'express-session'
+import FileStore from 'session-file-store'
+import MongoStore from 'connect-mongo'
 
 import productRouter from './router/product.routes.js'
 import cartRouter from './router/cart.routes.js'
 import viewRouter from './router/views.routes.js'
+import sessionsRouter from './router/sessions.routes.js'
 import { __dirname } from './utils.js'
 //import ProductManager from './dao/controllers/ProductManager.fs.js'
 
@@ -20,10 +24,19 @@ app.use(express.json())
 
 app.use('/static', express.static(`${__dirname} /public`))
 
+const fileStorage = FileStore(session)
+    app.use(session({
+        store: new fileStorage({path: './sessions', ttl:69, retries: 0}),
+        secret: 'Bruno123',
+        resave: false,
+        saveUninitialized: false
+    }))
+
 
 app.use("/", viewRouter)
 app.use("/api/products", productRouter)
 app.use("/api/carts", cartRouter)
+app.use('/api/sessions', sessionsRouter)
 
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");

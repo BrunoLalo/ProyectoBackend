@@ -10,25 +10,25 @@ export default class ProductController {
         return "Producto agregado"
     }
 
-    // async getProducts() {
-    //     try {
-    //         const products = await productModel.find().lean()
-    //         return products
-    //     } catch (err) {
-    //         return err.message
-    //     }
+    //async getProducts() {
+    //    try {
+    //        const products = await productModel.find().lean()
+    //        return products
+    //    } catch (err) {
+    //        return err.message
+    //    }
 
-    // }
+    //}
     async getProducts(page, query, sort) {
-        try {     
+        try {
             const products = await productModel.aggregate([
-                {$match: {page: page}},
-                {$match: {type: query}},
-                {$match: {price: sort}}
+                { $match: { page: page } },
+                { $match: { type: query } },
+                { $match: { price: sort } }
             ])
             return products
         }
-         catch (error) {
+        catch (error) {
             return error.message
         }
     }
@@ -50,7 +50,7 @@ export default class ProductController {
 
     async getProductsPaginated(offset, limit) {
         return await productModel.paginate(
-            { stock: 20},
+            { stock: 20 },
             { offset: offset, limit: limit, lean: true }
         )
     }

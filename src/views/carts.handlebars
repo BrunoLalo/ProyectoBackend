@@ -1,17 +1,12 @@
 <div class="row justify-content-center">
 
     <h1>CARRTITO</h1>
-    
-    <div class="col-md-4 col-xs-12 p-3" style="background-color: #e1e1e1;">
+
+    <div style="background-color: #e1e1e1;">
         {{#each carts}}
         <div class="card mb-4">
-
             <div class="cart-body">
                 <h5 class="cart-prod">{{this.products}}</h5>
-                <div style="width: 100%; text-align: right;">
-                    <button class="btn btn-success" onclick="agregar()"><i class="fas fa-cart-plus"></i> Agregar al
-                        carrito</button>
-                </div>
             </div>
         </div>
         {{/each}}
