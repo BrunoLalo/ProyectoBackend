@@ -42,9 +42,14 @@ class Users {
         return users;
     }
 
+    getUserById = async (id) => {
+        const user = userModel.findById(id);
+        return user;
+    }
+
     validateUser = async (user, pass) => {
         try {
-            return await userModel.findOne({ userName: user, password: crypto.createHash('sha256').update(pass).digest('hex')});
+            return await userModel.findOne({ userName: user, password: crypto.createHash('sha256').update(pass).digest('hex') });
         } catch (err) {
             this.status = `validateUser: ${err}`;
         }

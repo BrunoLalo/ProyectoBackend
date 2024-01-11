@@ -1,7 +1,12 @@
 import { Router } from 'express'
-import Users from '../dao/controllers/users.controller.mdb.js';
+import passport from 'passport'
 
-const users = new Users();
+import userModel from '../dao/models/users.model.js'
+import { createHash, isValidPassword, generateToken } from '../utils.js'
+import initPassport from '../config/passport.config.js'
+
+initPassport()
+
 const router = Router()
 
 const auth = (req, res, next) => {
@@ -56,19 +61,58 @@ router.get('/admin', auth, async (req, res) => {
     }
 })
 
+router.get('/hash/:pass', async (req, res) => {
+    res.status(200).send({ status: 'OK', data: createHash(req.params.pass) })
+})
+
+router.get('/failregister', async (req, res) => {
+    res.status(400).send({ status: 'ERR', data: 'El email ya existe o faltan datos obligatorios' })
+})
+
+router.get('/failrestore', async (req, res) => {
+    res.status(400).send({ status: 'ERR', data: 'El email no existe o faltan datos obligatorios' })
+})
+
+router.get('/github', passport.authenticate('githubAuth', { scope: ['user:email'] }), async (req, res) => {
+})
+
+router.get('/githubcallback', passport.authenticate('githubAuth', { failureRedirect: '/login' }), async (req, res) => {
+    req.session.user = { username: req.user.email, admin: true }
+    res.redirect('/profile')
+})
+
 router.post('/login', async (req, res) => {
-    const { login_email, login_password } = req.body; 
-    const user = await users.validateUser(login_email, login_password);
+    try {
+        const { email, pass } = req.body
 
-    if (user === null) {
-        req.session.userValidated = req.sessionStore.userValidated = false;
-        req.session.errorMessage = req.sessionStore.errorMessage = 'Usuario o clave no válidos';
-    } else {
-        req.session.userValidated = req.sessionStore.userValidated = true;
-        req.session.errorMessage = req.sessionStore.errorMessage = '';
+
+        const userInDb = await userModel.findOne({ email: email })
+        if (userInDb !== null && isValidPassword(userInDb, pass)) {
+
+            const access_token = generateToken({ username: email, admin: true }, '1h')
+            res.redirect(`/profilejwt?access_token=${access_token}`)
+        } else {
+            res.status(401).send({ status: 'ERR', data: 'Datos no válidos' })
+        }
+    } catch (err) {
+        res.status(500).send({ status: 'ERR', data: err.message })
     }
-    res.redirect('/products');
-});
+})
 
+router.post('/register', passport.authenticate('registerAuth', { failureRedirect: '/api/sessions/failregister' }), async (req, res) => {
+    try {
+        res.status(200).send({ status: 'OK', data: 'Usuario registrado' })
+    } catch (err) {
+        res.status(500).send({ status: 'ERR', data: err.message })
+    }
+})
+
+router.post('/restore', passport.authenticate('restoreAuth', { failureRedirect: '/api/sessions/failrestore' }), async (req, res) => {
+    try {
+        res.status(200).send({ status: 'OK', data: 'Clave actualizada' })
+    } catch (err) {
+        res.status(500).send({ status: 'ERR', data: err.message })
+    }
+})
 
 export default router
