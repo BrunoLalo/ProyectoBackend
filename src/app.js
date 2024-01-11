@@ -10,6 +10,7 @@ import productRouter from './router/product.routes.js'
 import cartRouter from './router/cart.routes.js'
 import viewRouter from './router/views.routes.js'
 import sessionsRouter from './router/sessions.routes.js'
+import userRoutes from './router/users.routes.js'; 
 import { __dirname } from './utils.js'
 //import ProductManager from './dao/controllers/ProductManager.fs.js'
 
@@ -37,6 +38,7 @@ app.use("/", viewRouter)
 app.use("/api/products", productRouter)
 app.use("/api/carts", cartRouter)
 app.use('/api/sessions', sessionsRouter)
+app.use('/api/users', userRoutes)
 
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");

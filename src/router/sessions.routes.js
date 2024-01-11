@@ -1,5 +1,7 @@
 import { Router } from 'express'
+import Users from '../dao/controllers/users.controller.mdb.js';
 
+const users = new Users();
 const router = Router()
 
 const auth = (req, res, next) => {
@@ -55,18 +57,18 @@ router.get('/admin', auth, async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    try {
-        const { user, pass } = req.body
-        if (user === 'Bruno123' && pass === 'Bruno123') {
-            req.session.user = { username: user, admin: true }
-            res.redirect('/products')
-        } else {
-            res.status(401).send({ status: 'ERR', data: 'Datos no válidos' })
-        }
-    } catch (err) {
-        res.status(500).send({ status: 'ERR', data: err.message })
+    const { login_email, login_password } = req.body; 
+    const user = await users.validateUser(login_email, login_password);
+
+    if (user === null) {
+        req.session.userValidated = req.sessionStore.userValidated = false;
+        req.session.errorMessage = req.sessionStore.errorMessage = 'Usuario o clave no válidos';
+    } else {
+        req.session.userValidated = req.sessionStore.userValidated = true;
+        req.session.errorMessage = req.sessionStore.errorMessage = '';
     }
-})
+    res.redirect('/products');
+});
 
 
 export default router
