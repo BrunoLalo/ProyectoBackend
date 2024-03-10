@@ -1,49 +1,34 @@
 import { Router } from "express";
 import Users from '../dao/controllers/users.controller.mdb.js';
-import { __dirname } from '../utils.js';
+import { createHash } from '../utils.js';
 
-const userRoutes = (io) => {
+const userRoutes = () => {
     const router = Router();
     const manager = new Users();
-
-    const validate = async (req, res, next) => {
-        if (req.session.userValidated) {
-            next();
-        } else {
-            res.status(401).send({ status: 'ERR', error: 'No tiene autorización para realizar esta solicitud' });
-        }
-    }
        
-    router.get('/:id?', validate, async (req, res) => { 
-        try {
-            if (req.params.id === undefined) {
-                const users = await manager.getUsers();
-                res.status(200).send({ status: 'OK', data: users });
-            } else {
-                const user = await manager.getUserById(req.params.id);
-                res.status(200).send({ status: 'OK', data: user });
-            }
-        } catch (err) {
-            res.status(500).send({ status: 'ERR', error: 'No se encuentra el usuario' });
-        }
+    router.get('/', async(req, res) => {
+        const users = await manager.getUsers();
+        if (!users) return res.status(500).send({ status: 'ERR', error: 'Error interno al obtener usuarios' });
+
+        res.status(200).send({ status: 'OK', payload: users });
+    });
+
+    router.get('/:uid', async(req, res) => {
+        const user = await manager.getUserById(req.params.uid);
+        if (!user) return res.status(200).send({ status: 'ERR', error: 'No se encuentra el usuario' });
+
+        res.status(200).send({ status: 'OK', payload: user });
     });
     
-    router.post('/', validate, async (req, res) => {
-        try {
-            await manager.addUser(req.body);
-            io.emit('new_user', req.body);
-    
-            if (manager.checkStatus() === 1) {
-                res.status(200).send({ status: 'OK'});
-            } else {
-                res.status(400).send({ status: 'ERR' });
-            }
-        } catch (err) {
-            console.error(err);
-            res.status(500).send({ status: 'ERR', error: 'No se puede agregar el usuario' });
-        }
+    router.post('/', async(req, res) => {
+        const { firstName, lastName, email, password, gender, role } = req.body;
+        if (!firstName || !lastName || !email || !password || !gender || !role) return res.status(400).send({ status: 'ERR', error: 'Se requieren los campos firstName, lastName, userName, password y gender' });
+
+        const newUser = { firstName: firstName, lastName: lastName, email: email, password: createHash(password), gender: gender, role: role };
+        const result = await manager.addUser(newUser);
+        if (!result) return res.status(500).send({ status: 'ERR', error: 'Error interno al agregar usuario' });
+        res.status(200).send({ status: 'OK', payload: result });
     });
-    
     
     return router;
 }

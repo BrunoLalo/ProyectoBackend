@@ -1,12 +1,14 @@
 import { Router } from 'express'
 import ProductController from '../dao/controllers/product.controller.mdb.js'
 import CartController from '../dao/controllers/cart.controller.mdb.js'
-import messageModel from '../dao/models/message.model.js'
+import Users from '../dao/controllers/users.controller.mdb.js'
+// import messageModel from '../dao/models/message.model.js'
 
 
 const router = Router()
 const controller = new ProductController()
 const cart = new CartController()
+const usersManager = new Users();
 
 router.get("/", async (req, res) => {
     const products = await controller.getProducts()
@@ -87,4 +89,10 @@ router.get('/login', async (req, res) => {
         res.render('login', {})
     }
 })
+
+router.get('/users', async(req, res) => {
+    const users = await usersManager.getUsers();
+    res.render('users', { users });
+})
+
 export default router

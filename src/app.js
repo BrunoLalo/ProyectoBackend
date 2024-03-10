@@ -1,17 +1,21 @@
 import express from 'express'
-import handlebars from "express-handlebars";
+import handlebars from "express-handlebars"
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import session from 'express-session'
 import FileStore from 'session-file-store'
+import passport from 'passport'
 import MongoStore from 'connect-mongo'
+import cookieParser from 'cookie-parser'
+
 
 import productRouter from './router/product.routes.js'
 import cartRouter from './router/cart.routes.js'
 import viewRouter from './router/views.routes.js'
 import sessionsRouter from './router/sessions.routes.js'
-import userRoutes from './router/users.routes.js'; 
+import userRoutes from './router/users.routes.js';
 import { __dirname } from './utils.js'
+import initPassport from './config/passport.config.js'
 //import ProductManager from './dao/controllers/ProductManager.fs.js'
 
 const app = express()
@@ -25,14 +29,22 @@ app.use(express.json())
 
 app.use('/static', express.static(`${__dirname} /public`))
 
-const fileStorage = FileStore(session)
-    app.use(session({
-        store: new fileStorage({path: './sessions', ttl:69, retries: 0}),
-        secret: 'Bruno123',
-        resave: false,
-        saveUninitialized: false
-    }))
+initPassport();
+app.use(passport.initialize());
+app.use(cookieParser());
 
+const store = MongoStore.create({ mongoUrl: MONGOOSE_URL, mongoOptions: {}, ttl: 30 });
+app.use(session({
+    store: store,
+    secret: 'Bruno123',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}));
+
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/", viewRouter)
 app.use("/api/products", productRouter)

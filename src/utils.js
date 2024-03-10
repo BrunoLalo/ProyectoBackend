@@ -5,10 +5,11 @@ import jwt from 'jsonwebtoken'
 const PRIVATE_KEY = 'Coder55605_Key_Jwt'
 
 export const __filename = url.fileURLToPath(import.meta.url)
-
 export const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
-export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+export const createHash = (pass) => {
+    return bcrypt.hashSync(pass, bcrypt.genSaltSync(10));
+}
 
 export const isValidPassword = (user, password) => bcrypt.compareSync(password, user.password)
 
