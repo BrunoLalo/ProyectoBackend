@@ -18,12 +18,12 @@ import { __dirname } from './utils.js'
 import initPassport from './config/passport.config.js'
 //import ProductManager from './dao/controllers/ProductManager.fs.js'
 
-const app = express()
-const PORT = 8080
-//const MONGOOSE_URL = 'mongodb://127.0.0.1:27017/Proyecto-back'
-const MONGOOSE_URL = 'mongodb+srv://lalomiabruno:lalomiabruno@cluster0.oqofsvd.mongodb.net/ecommerce'
-// const manager = new ProductManager()
+import config from "../config.js";
 
+// const PORT = 8080
+// const MONGOOSE_URL = 'mongodb+srv://lalomiabruno:lalomiabruno@cluster0.oqofsvd.mongodb.net/ecommerce'
+
+const app = express()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -33,15 +33,20 @@ initPassport();
 app.use(passport.initialize());
 app.use(cookieParser());
 
-const store = MongoStore.create({ mongoUrl: MONGOOSE_URL, mongoOptions: {}, ttl: 30 });
-app.use(session({
-    store: store,
-    secret: 'Bruno123',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
-}));
-
+const fileStorage = FileStore(session);
+app.use(
+    session({
+        store: MongoStore.create({
+            mongoUrl: config.MONGO_URL,
+            mongoOptions: {},
+            ttl: 60,
+            clearInterval: 5000,
+        }),
+        secret: 'Bruno123',
+        resave: false,
+        saveUninitialized: false,
+    })
+);
 initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,32 +62,42 @@ app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
 
 
-const httpServer = app.listen(PORT, () => {
-    console.log(`Servidor express activo en puerto ${PORT}`)
-})
-
-const messages = []
-
-const socketServer = new Server(httpServer, {
-    cors: {
-        origin: "*",
-        methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
-        credentials: false
-    }
-})
-
-socketServer.on('connection', socket => {
-    socket.on('message', data => {
-        messages.push(data)
-
-        socketServer.emit('messageLogs', messages)
-    })
+try {
+    await mongoose.connect(config.MONGO_URL);
+    const server = app.listen(config.PORT, () => {
+        console.log(`Backend activo en puerto ${config.PORT}`);
+    });
+} catch (err) {
+    console.log(`No se puede conectar con base de datos (${err.message})`);
+}
 
 
-})
+// const httpServer = app.listen(PORT, () => {
+//     console.log(`Servidor express activo en puerto ${PORT}`)
+// })
+
+// const messages = []
+
+// const socketServer = new Server(httpServer, {
+//     cors: {
+//         origin: "*",
+//         methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
+//         credentials: false
+//     }
+// })
+
+// socketServer.on('connection', socket => {
+//     socket.on('message', data => {
+//         messages.push(data)
+
+//         socketServer.emit('messageLogs', messages)
+//     })
+
+
+// })
 
 //  socketServer.on('connection', socket => {
-//      console.log("CLIENTE CONECTADO")
+    //      console.log("CLIENTE CONECTADO")
 //      socket.on('msg', data => {
 //          console.log(data)
 //          manager.addProducts(data)
@@ -90,12 +105,5 @@ socketServer.on('connection', socket => {
 //      })
 //  })
 
-
-try {
-    await mongoose.connect(MONGOOSE_URL)
-    console.log('Backend conectado')
-} catch (err) {
-    console.log(`No se puede conectar con bbdd (${err.message})`)
-}
 
 
