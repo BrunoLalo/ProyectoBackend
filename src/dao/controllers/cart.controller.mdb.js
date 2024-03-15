@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import cartModel from '../models/cart.model.js'
 import productModel from '../models/product.model.js'
+import ProductController from './product.controller.mdb.js';
 
 export default class CartController {
     constructor() {
@@ -119,5 +120,54 @@ export default class CartController {
             this.statusMsg = `deleteCartProduct: ${err}`
         }
     }
+
+    async processPurchase(cid) {
+        const cart = await CartController.getCartById(cid);
+    
+        if (cart === null) {
+          throw error;
+
+        } else {
+          let total = 0;
+          let cartModified = false;
+    
+          for (const item of cart.products) {
+            const pid = item.pid._id;
+            const qty = item.qty;
+            const stock = item.pid.stock;
+            const price = item.pid.price;
+    
+            if (stock > 0) {
+              let newStock = 0;
+    
+              if (stock >= qty) {
+                newStock = stock - qty;
+                item.qty = 0;
+                total += qty * price;
+              } else {
+                newStock = 0;
+                item.qty -= stock;
+                total += stock * price;
+              }
+    
+              await ProductController.updateProduct(pid, { stock: newStock });
+              cartModified = true;
+            }
+          }
+    
+          if (cartModified) {
+            await cart.save();
+            await ticketService.addTicket({
+              amount: total,
+              purchaser: req.user._id,
+            });
+    
+            return cart;
+          } else {
+            return error;
+          }
+        }
+      }
+
 }
 

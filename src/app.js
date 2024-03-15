@@ -2,23 +2,21 @@ import express from 'express'
 import handlebars from "express-handlebars"
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
-import session from 'express-session'
 import FileStore from 'session-file-store'
 import passport from 'passport'
-import MongoStore from 'connect-mongo'
 import cookieParser from 'cookie-parser'
-
 
 import productRouter from './router/product.routes.js'
 import cartRouter from './router/cart.routes.js'
 import viewRouter from './router/views.routes.js'
 import sessionsRouter from './router/sessions.routes.js'
-import userRoutes from './router/users.routes.js';
+import userRoutes from './router/users.routes.js'
+import cookieRouter from './router/cookies.routes.js'
 import { __dirname } from './utils.js'
 import initPassport from './config/passport.config.js'
-//import ProductManager from './dao/controllers/ProductManager.fs.js'
+import config from './config.js'
+import {sessions} from './middleware/sessions.js'
 
-import config from "../config.js";
 
 // const PORT = 8080
 // const MONGOOSE_URL = 'mongodb+srv://lalomiabruno:lalomiabruno@cluster0.oqofsvd.mongodb.net/ecommerce'
@@ -34,19 +32,22 @@ app.use(passport.initialize());
 app.use(cookieParser());
 
 const fileStorage = FileStore(session);
-app.use(
-    session({
-        store: MongoStore.create({
-            mongoUrl: config.MONGO_URL,
-            mongoOptions: {},
-            ttl: 60,
-            clearInterval: 5000,
-        }),
-        secret: 'Bruno123',
-        resave: false,
-        saveUninitialized: false,
-    })
-);
+
+// app.use(
+//     session({
+//         store: MongoStore.create({
+//             mongoUrl: config.MONGO_URL,
+//             mongoOptions: {},
+//             ttl: 60,
+//             clearInterval: 5000,
+//         }),
+//         secret: 'Bruno123',
+//         resave: false,
+//         saveUninitialized: false,
+//     })
+// );
+
+app.use(sessions)
 initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -56,6 +57,7 @@ app.use("/api/products", productRouter)
 app.use("/api/carts", cartRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('/api/users', userRoutes)
+app.use('/api/cookies', cookieRouter)
 
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");

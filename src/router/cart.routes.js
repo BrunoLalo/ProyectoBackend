@@ -12,6 +12,17 @@ cartRouter.get('/:cid', async (req, res) => {
     res.status(200).send(await cart.getCartById(req.params.cid))
 })
 
+cartRouter.get("/:cid/purchase", async (req, res) => {
+    try {
+      res.status(200).send({
+        status: "OK",
+        data: await cart.processPurchase(req.params.cid),
+      });
+    } catch (err) {
+      res.status(500).send({ status: "ERR", data: err.message });
+    }
+  });
+
 cartRouter.post('/', async (req, res) => {
 
     const products_array = req.body;

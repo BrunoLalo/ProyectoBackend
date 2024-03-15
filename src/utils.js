@@ -7,5 +7,10 @@ export const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 export const createHash = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
 export const isValidPassword = (user, password) =>
   bcrypt.compareSync(password, user.password);
+
+export function hasheoPrev(recibida, almacenada) {
+  return bcrypt.compareSync(recibida, almacenada)
+}
