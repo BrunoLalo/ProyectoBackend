@@ -8,7 +8,7 @@ export async function authUser(name, pass) {
 
     if (name === "adminCoder" && pass === 'admin111') {
         datos = {
-            first_name: 'admin',
+            first_name: 'adminCoder',
             last_name: 'admin',
             email: 'admin@admin.com',
             role: 'admin'

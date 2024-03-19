@@ -12,6 +12,7 @@ import viewRouter from './router/views.routes.js'
 import sessionsRouter from './router/sessions.routes.js'
 import userRoutes from './router/users.routes.js'
 import cookieRouter from './router/cookies.routes.js'
+import mockRouter from './router/mocking.routes.js'
 import { __dirname } from './utils.js'
 import initPassport from './config/passport.config.js'
 import config from './config.js'
@@ -31,7 +32,7 @@ initPassport();
 app.use(passport.initialize());
 app.use(cookieParser());
 
-const fileStorage = FileStore(session);
+const fileStorage = FileStore(sessions);
 
 // app.use(
 //     session({
@@ -58,6 +59,8 @@ app.use("/api/carts", cartRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('/api/users', userRoutes)
 app.use('/api/cookies', cookieRouter)
+app.use('/mockingproducts', mockRouter)
+
 
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
