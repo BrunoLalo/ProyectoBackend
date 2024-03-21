@@ -13,6 +13,7 @@ const config = {
   port: process.env.PORT || 8080,
   mongoUrl: process.env.MONGOOSE_URL,
   SECRET_KEY: process.env.SECRET_KEY,
+  MODE: process.env.MODE,
   GITHUB_AUTH: {
     clientId: process.env.GITHUB_AUTH_CLIENT_ID,
     clientSecret: process.env.GITHUB_AUTH_CLIENT_SECRET,

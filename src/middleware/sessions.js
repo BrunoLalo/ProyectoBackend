@@ -1,9 +1,9 @@
 import session from 'express-session'
 import config from '../config.js'
+import connectMongo from 'connect-mongo'
 
-const MongoStore = import('connect-mongo').default
 
-const store = MongoStore.create({
+const store = connectMongo.create({
   mongoUrl: config.MONGO_URL,
   ttl: 60 * 60 * 24 
 })
