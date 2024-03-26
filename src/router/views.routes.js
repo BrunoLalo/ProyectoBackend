@@ -95,4 +95,8 @@ router.get('/users', async(req, res) => {
     res.render('users', { users });
 })
 
+router.get('/resetPass', async(req,res)=>{
+    res.render('resetPass.handlebars')
+})
+
 export default router

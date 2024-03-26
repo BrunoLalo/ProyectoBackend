@@ -1,9 +1,10 @@
 import { Router } from "express";
 import Users from '../dao/controllers/users.controller.mdb.js';
 import { UserRepository } from "../repository/user.repository.js";
+import { usersServices } from "../services/user.service.js";
 import { createHash } from '../utils.js';
 import { authUser } from "../middleware/auth.js";
-import { notAuth, admin, soloRoles, isAdmin } from "../middleware/authorization.js"
+import { notAuth, admin, soloRoles, isAdmin, isPremium } from "../middleware/authorization.js"
 
 const userRoutes = () => {
     const router = Router();
@@ -65,6 +66,17 @@ const userRoutes = () => {
             return res.status(500).json({ status: 'error', message: error.message });
           }
         
+    })
+
+    router.put('/premium/:uid', authUser, isPremium, async (req, res) =>{
+        try {
+            const userId = req.params.userId;
+            const { role } = req.body; 
+            const updatedUser = await usersServices.updateUserRole(userId, role);
+            res.json(updatedUser);
+         } catch (error) {
+            next(error);
+        }
     })
 
     return router;

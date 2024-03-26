@@ -1,4 +1,4 @@
-import config from '../config.js'
+import {MODE} from '../config.js'
 import winston from 'winston'
 
 const customLevelsOptions = {
@@ -44,7 +44,7 @@ const winstonLoggerProd = winston.createLogger({
 })
 
 export function getLogger() {
-    if (config.MODE === 'production') {
+    if ( MODE === 'production') {
         return winstonLoggerProd
     } else {
         return winstonLoggerDev
@@ -52,7 +52,7 @@ export function getLogger() {
 }
 
 export const loggerInRequest = (req, res, next) => {
-    req.logger = logger
+    req.logger = getLogger()
     req.logger.info(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
     next()
 }

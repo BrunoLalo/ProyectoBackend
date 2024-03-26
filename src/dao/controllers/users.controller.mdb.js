@@ -111,6 +111,15 @@ class Users {
         }
     }
 
+    updateUserRole = async (userId, newRole) => {
+        try {
+            const updatedUser = await UserModel.findOneAndUpdate(userId, newRole);
+            return updatedUser.toObject();
+        } catch (error) {
+            throw new Error('Error al actualizar usuario por email en la base de datos');
+        }
+    }
+
 }
 
 export default Users;
