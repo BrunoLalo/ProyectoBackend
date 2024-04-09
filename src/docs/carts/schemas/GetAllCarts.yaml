@@ -1,0 +1,16 @@
+components:
+  requestBodies:
+    GetAllCarts:
+      type: object
+      required:
+        - product
+      properties:
+        products:
+          type: array
+          description: Listado de Productos elegidos
+      example:
+        products: 
+          object: "Maceta"
+          title: "Face"
+          description: "Macetas con rostros pintados a mano"
+          price: 1000  

@@ -1,0 +1,18 @@
+paths:
+  /api/carts:
+    get:
+      summary: Devuelve todos los Carritos.
+      tags:
+        - Cart
+      responses:
+        "200":
+          description: Carritos Encontrados.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carts'
+        "500":
+          description: Problema para recuperar Carritos el Servidor.  
+          

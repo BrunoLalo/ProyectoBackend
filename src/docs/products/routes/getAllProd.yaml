@@ -1,0 +1,18 @@
+paths:
+  /api/products:
+    get:
+      summary: Devuelve todos los productos disponibles.
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Productos Encontrados.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Products'
+        "500":
+          description: Problema para recuperar Productos desde el Servidor.  
+          

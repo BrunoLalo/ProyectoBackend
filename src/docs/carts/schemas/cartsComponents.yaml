@@ -1,0 +1,21 @@
+components:
+  schemas:
+    Carts:
+      type: object
+      required:
+        - id
+        - products
+      properties:
+        id:
+          type: UUID
+          description: El id del Producto
+        products:
+          type: array
+          description: Todos los productos seleccionados
+      example:
+        id: '761eb678-f6c2-4550-b30f-6de21a98ff22'
+        products: 
+          object: "Maceta"
+          title: "Face"
+          description: "Macetas con rostros pintados a mano"
+          price: 1000 

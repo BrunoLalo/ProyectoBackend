@@ -1,0 +1,26 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Devuelve el Carrito con el ID dado.
+      tags:
+        - Cart
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: parametro de ruta para busqueda con el ID del carrito.
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Carrito Encontrado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Carts'
+        "404":
+          description: Carrito No Encontrado.
+        "500":
+          description: Problema para recuperar Carrito desde el Servidor.

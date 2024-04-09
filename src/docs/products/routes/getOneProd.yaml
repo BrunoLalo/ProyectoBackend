@@ -1,0 +1,26 @@
+paths:
+  /api/products/{pid}:
+    get:
+      summary: Devuelve el Producto con el ID dado.
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: parametro de ruta para busqueda con el ID del productro.
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Producto Encontrado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Products'
+        "404":
+          description: Producto No Encontrado.
+        "500":
+          description: Problema para recuperar Producto desde el Servidor.

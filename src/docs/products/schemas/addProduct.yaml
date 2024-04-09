@@ -1,0 +1,47 @@
+components:
+  requestBodies:
+    PostProduct:
+      type: object
+      required:
+        - category
+        - object
+        - title
+        - description
+        - code
+        - stock
+        - status
+        - price
+      properties:
+        category:
+          type: string
+          description: La categoria del Producto
+        object:
+          type: string
+          description: Que clase de Objeto es el Producto
+        title:
+          type: string
+          description: El nombre del Producto
+        description:
+          type: string
+          description: La descripcion del Producto
+        code:
+          type: string
+          description: El codigo del Producto
+        stock:
+          type: string
+          description: Cantidad de Producto en exsitencia
+        status:
+          type: string
+          description: Si hay disponibilidad del producto o no (avaliable/unavailable)
+        price:
+          type: string
+          description: El precio del Producto
+      example:
+        category: "Linea Susan"
+        object: "Maceta"
+        title: "Face"
+        description: "Macetas con rostros pintados a mano"
+        code: "LS001"
+        stock: 40
+        status: "available"
+        price: 1000

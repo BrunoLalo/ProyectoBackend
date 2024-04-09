@@ -5,6 +5,8 @@ import mongoose from 'mongoose'
 import FileStore from 'session-file-store'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 import productRouter from './router/product.routes.js'
 import cartRouter from './router/cart.routes.js'
@@ -23,6 +25,20 @@ import { loggerTest } from './services/loggerTest.js'
 
 
 const app = express()
+
+
+const swaggerOptions = {
+    definition: {
+      openapi: '3.0.1',
+      info: {
+        title: 'Documentación de swagger',
+        description: 'Esta es la documentación de mi proyecto para products y carts',
+      },
+    },
+    apis: ['./src/docs/**/*yaml'],
+  };
+  
+  const specs = swaggerJsdoc(swaggerOptions);
 
 
 app.use(express.urlencoded({ extended: true }))
@@ -50,6 +66,8 @@ app.use('/api/sessions', sessionsRouter)
 app.use('/api/users', userRoutes)
 app.use('/api/cookies', cookieRouter)
 app.use('/mockingproducts', mockRouter)
+
+app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 const logger = getLogger()  
 

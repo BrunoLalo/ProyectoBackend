@@ -1,0 +1,34 @@
+paths:
+  /api/carts/{:cid/add/:pid}:
+    put:
+      summary: Agrega un Producto al carrito.
+      tags:
+        - Cart
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: busqueda con el ID del carrito Para actualizarlo.
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                $ref: '#components/requestBodies/UpdateCart'
+      responses:
+        "200":
+          description: Carrito Encontrado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Carts'
+        "400":
+          description: Datos Invalidos.
+        "404":
+          description: Carrito No Encontrado.
+        "500":
+          description: Problema para recuperar Carrito desde el Servidor.    

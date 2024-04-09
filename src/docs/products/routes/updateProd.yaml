@@ -1,0 +1,34 @@
+paths:
+  /api/products/{pid}:
+    put:
+      summary: Actualiza un Producto.
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: busqueda con el ID del productro Para actualizarlo.
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: Producto Encontrado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Products'
+        "400":
+          description: Datos Invalidos.
+        "404":
+          description: Producto No Encontrado.
+        "500":
+          description: Problema para recuperar Producto desde el Servidor.    
