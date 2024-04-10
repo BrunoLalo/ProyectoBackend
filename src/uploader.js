@@ -11,4 +11,33 @@ const storage = multer.diskStorage({
     }
 })
 
-export const uploader = multer({ storage })
+const uploader = multer({ storage });
+
+const documentStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const folder = path.resolve(
+        __dirname,
+        `../../uploads/${file.mimetype.split("/")[0]}`
+      );
+      if (!fs.existsSync(folder)) {
+        fs.mkdirSync(folder);
+      }
+      cb(null, folder);
+    },
+    filename: (req, file, cb) => {
+      crypto.randomBytes(16, (err, hash) => {
+        if (err) cb(err);
+        const filename = `${hash.toString("hex")}-${file.originalname}`;
+        cb(null, filename);
+      });
+    },
+  });
+  
+  const uploadDocuments = multer({ storage: documentStorage }).fields([
+    { name: "identification", maxCount: 1 },
+    { name: "proofOfAddress", maxCount: 1 },
+    { name: "proofOfAccountStatus", maxCount: 1 },
+  ]);
+
+
+  export { uploader, uploadDocuments };

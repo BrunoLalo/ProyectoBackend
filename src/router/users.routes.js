@@ -5,6 +5,7 @@ import { usersServices } from "../services/user.service.js";
 import { createHash } from '../utils.js';
 import { authUser } from "../middleware/auth.js";
 import { notAuth, admin, soloRoles, isAdmin, isPremium } from "../middleware/authorization.js"
+import { uploader } from "../uploader.js";
 
 const userRoutes = Router();
 const manager = new Users();
@@ -70,15 +71,54 @@ const manager = new Users();
 
     userRoutes.put('/premium/:uid', authUser, isPremium, async (req, res) =>{
         try {
-            const userId = req.params.userId;
-            const { role } = req.body; 
-            const updatedUser = await usersServices.updateUserRole(userId, role);
-            res.json(updatedUser);
-         } catch (error) {
-            next(error);
+            const { uid } = req.params;
+            const user = await manager.getUserById(uid);
+    
+            if (!user) {
+                return res.status(404).send({ status: "ERR", message: "User not found" });
+            }
+    
+            if (!user.documents || user.documents.length === 0) {
+                return res.status(400).send({ status: "ERR", message: "User must upload required documents before upgrading to premium" });
+            }
+    
+            if (user.role !== "user") {
+                return res.status(400).send({ status: "ERR", message: "User is not a regular user" });
+            }
+    
+            user.role = "premium";
+            await manager.updateUser(user);
+    
+            return res.status(200).send({ status: "OK", message: "User upgraded to premium" });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send({ status: "ERR", message: "Internal server error" });
         }
     })
 
+    userRoutes.post('/:uid/documents', authUser, uploader.single("file"), async (req, res) => {
+        try {
+            const { uid } = req.params;
+            const user = await manager.getUserById(uid);
 
+            if (!user) {
+                return res.status(404).send({ status: "ERR", message: "User not found" });
+            }
+
+            const documents = req.files.map(file => ({
+                name: file.originalname,
+                reference: file.filename
+            }));
+
+            user.documents = user.documents || [];
+            user.documents.push(...documents);
+            await manager.updateUser(user);
+
+            return res.status(200).send({ status: "OK", message: "Documents uploaded successfully", documents });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send({ status: "ERR", message: "Internal server error" });
+        }
+    })
 
 export default userRoutes;
