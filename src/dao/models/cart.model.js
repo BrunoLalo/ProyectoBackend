@@ -9,7 +9,9 @@ const schema = new mongoose.Schema({
     products: [{
         pid: { type: [mongoose.Schema.Types.ObjectId], ref: 'products' },
         qty: Number,
-    }]
+    }],
+    user: { type: String, required: true },
+    totalAmount: { type: Number, default: 0 },  
 })
 
 schema.pre('find', function () {

@@ -27,18 +27,10 @@ class Users {
 
     addUser = async (user) => {
         try {
-            if (!Users.#objEmpty(user) && Users.#verifyRequiredFields(user)) {
-                user.password = createHash(user.password);
-                const process = await userModel.create(user);
-                this.status = 1;
-                this.statusMsg = "Usuario registrado en bbdd";
-            } else {
-                this.status = -1;
-                this.statusMsg = `Faltan campos obligatorios (${Users.requiredFields.join(', ')})`;
-            }
-        } catch (err) {
-            this.status = -1;
-            this.statusMsg = `AddUser: ${err.message}`;
+            const doc = await userModel.create(user)
+            return doc
+        } catch (error) {
+            throw error;
         }
     }
 

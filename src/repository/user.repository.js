@@ -1,8 +1,9 @@
 import Users from "../dao/controllers/users.controller.mdb.js";
-import UserDto from '../dto/user.dto.js';
+import {UserDto} from '../dto/user.dto.js';
 
 
 export class UserRepository {
+  
   static async addUser(userData) {
     try {
       const user = await Users.createUser(userData);

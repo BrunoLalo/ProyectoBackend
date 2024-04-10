@@ -6,35 +6,35 @@ import { createHash } from '../utils.js';
 import { authUser } from "../middleware/auth.js";
 import { notAuth, admin, soloRoles, isAdmin, isPremium } from "../middleware/authorization.js"
 
-const userRoutes = () => {
-    const router = Router();
-    const manager = new Users();
+const userRoutes = Router();
+const manager = new Users();
 
-    router.get('/', async (req, res) => {
+
+    userRoutes.get('/', async (req, res) => {
         const users = await manager.getUsers();
         if (!users) return res.status(500).send({ status: 'ERR', error: 'Error interno al obtener usuarios' });
 
         res.status(200).send({ status: 'OK', payload: users });
     });
 
-    router.get('/:uid', async (req, res) => {
+    userRoutes.get('/:uid', async (req, res) => {
         const user = await manager.getUserById(req.params.uid);
         if (!user) return res.status(200).send({ status: 'ERR', error: 'No se encuentra el usuario' });
 
         res.status(200).send({ status: 'OK', payload: user });
     });
 
-    router.post('/', async (req, res) => {
-        const { firstName, lastName, email, password, gender, role } = req.body;
-        if (!firstName || !lastName || !email || !password || !gender || !role) return res.status(400).send({ status: 'ERR', error: 'Se requieren los campos firstName, lastName, userName, password y gender' });
+    userRoutes.post('/', async (req, res) => {
+        const { first_name, last_name, email, gender, password, role } = req.body;
+        if (!first_name || !last_name || !email || !gender || !password || !role) return res.status(400).send({ status: 'ERR', error: 'Se requieren los campos firstName, lastName, password, gender y role' });
 
-        const newUser = { firstName: firstName, lastName: lastName, email: email, password: createHash(password), gender: gender, role: role };
+        const newUser = { first_name: first_name, last_name: last_name, email: email,  gender: gender,password: createHash(password), role: role };
         const result = await manager.addUser(newUser);
         if (!result) return res.status(500).send({ status: 'ERR', error: 'Error interno al agregar usuario' });
         res.status(200).send({ status: 'OK', payload: result });
     });
 
-    router.get('/current', authUser, soloRoles(['users']), async (req, res) => {
+    userRoutes.get('/current', authUser, soloRoles(['users']), async (req, res) => {
         try {
             const user = req.session.user;
 
@@ -49,7 +49,7 @@ const userRoutes = () => {
         }
     })
 
-    router.get('/admin', authUser, soloRoles(['admin']), async (req, res) => {
+    userRoutes.get('/admin', authUser, soloRoles(['admin']), async (req, res) => {
         try {
             const usuario = await Users.find().lean();
             res.successfullGet(usuario);
@@ -58,7 +58,7 @@ const userRoutes = () => {
           }
     })
 
-    router.get('/roles', authUser, soloRoles(['admin']), async (req, res) => {
+    userRoutes.get('/roles', authUser, soloRoles(['admin']), async (req, res) => {
         try {
             const usuario = await Users.find().lean();
             res.successfullGet(usuario);
@@ -68,7 +68,7 @@ const userRoutes = () => {
         
     })
 
-    router.put('/premium/:uid', authUser, isPremium, async (req, res) =>{
+    userRoutes.put('/premium/:uid', authUser, isPremium, async (req, res) =>{
         try {
             const userId = req.params.userId;
             const { role } = req.body; 
@@ -79,7 +79,6 @@ const userRoutes = () => {
         }
     })
 
-    return router;
-}
+
 
 export default userRoutes;
