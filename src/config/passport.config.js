@@ -6,6 +6,7 @@ import GithubStrategy from 'passport-github2'
 import userModel from '../dao/models/users.model.js'
 import { createHash, isValidPassword } from '../utils.js'
 import Users from '../dao/controllers/users.controller.mdb.js';
+import { GITHUB_AUTH } from '../config.js';
 
 
 // const LocalStrategy = local.Strategy;
@@ -49,6 +50,7 @@ const initPassport = async () => {
         const newUser = {
           first_name: name_parts[0],
           last_name: name_parts[1],
+          user_name: profile.json.username,
           email: profile._json.email,
           gender: "NA",
           password: " ",
@@ -79,9 +81,9 @@ const initPassport = async () => {
   );
 
   passport.use('githubAuth', new GithubStrategy({
-    clientID: 'Iv1.0c3c12fcc83c9770',
-    clientSecret: 'ea4f406cbd6be3c160113f683ab29059a0a21072',
-    callbackURL: 'http://localhost:5000/api/sessions/githubcallback'
+    clientID: GITHUB_AUTH.clientId,
+    clientSecret: GITHUB_AUTH.clientSecret,
+    callbackURL: GITHUB_AUTH.callbackUrl
   }, verifyGithub))
 
   passport.serializeUser((user, done) => {

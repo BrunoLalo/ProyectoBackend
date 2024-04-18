@@ -41,8 +41,8 @@ const swaggerOptions = {
   const specs = swaggerJsdoc(swaggerOptions);
 
 
-app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 app.use('/static', express.static(`${__dirname} /public`))
 
