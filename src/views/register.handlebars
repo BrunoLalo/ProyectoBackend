@@ -1,0 +1,52 @@
+<body class="bg-success">
+    <style>
+        .reg-container {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
+
+    <div class="reg-container">
+        <h1 style="margin-bottom: 30px;"><a
+                class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/">
+                <cite>SHOESTORE</cite></a></h1>
+        <h3>REGISTRAR USUARIO</h3>
+    </div>
+
+    <form class="p-4" action="/register" method="post">
+            <div class="form-group mb-4">
+                <label for="first_name">Nombre</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{first_name}}" required="required">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="last_name">Apellido</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{last_name}}" required="required">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="user_name">Usuario</label>
+                <input type="text" class="form-control" id="user_name" name="user_name" value="{{user_name}}" required="required">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{email}}" required="required">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="gender">Género</label>
+                <input type="gender" class="form-control" id="gender" name="gender" value="{{gender}}" required="required">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="password">Clave</label>
+                <input type="password" class="form-control" password="password" name="password" value="{{password}}"required="required">
+            </div>
+
+            <button type="submit" class="btn btn-info"><i class="fas fa-sign-in-alt"></i> Registrar</button>
+            
+        </form>
+
+</body>

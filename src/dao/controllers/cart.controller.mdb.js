@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import cartModel from '../models/cart.model.js'
 import productModel from '../models/product.model.js'
 import ProductController from './product.controller.mdb.js';
+import userModel from '../models/users.model.js';
 
 export default class CartController {
     constructor() {
@@ -19,13 +20,13 @@ export default class CartController {
 
     addCart = async (newCart) => {
         try {
-            if (newCart !== undefined && newCart.products.length > 0) {
+            if (newCart !== undefined) {
                 console.log(newCart);
                 const process = await cartModel.create(newCart)
                 return process
             }
 
-            return {}
+            return {newCart}
         } catch (err) {
             console.log(err.message)
         }
@@ -77,9 +78,9 @@ export default class CartController {
         }
     }
 
-    getCartById= async (id) => {
+    getCartById= async (params) => {
         try {
-            const cart = await cartModel.find({ _id: new mongoose.Types.ObjectId(id) }).populate({ path: 'products.pid', model: productModel });
+            const cart = await cartModel.find({user_name: params}).populate({path:'products', populate:{path:'pid', model:'products'}})
             this.status = 1
             this.statusMsg = 'Carrito recuperado'
             return cart;

@@ -36,10 +36,10 @@ class Users {
 
     getUsers = async () => {
         try {
-            const users = await userModel.find().populate('courses');
+            const users = await userModel.find().lean();
             this.status = 1;
             this.statusMsg = 'Usuarios recuperados';
-            return users.map(user => user.toObject());
+            return users;
         } catch (err) {
             this.status = -1;
             this.statusMsg = `getUsers: ${err.message}`;
@@ -49,7 +49,7 @@ class Users {
     getUserBy = async (params) => {
         try {
             this.status = 1;
-            const user = await userModel.findOne(params).populate('courses').lean();
+            const user = await userModel.findOne(params).lean();
             return user;
         } catch(err) {
             this.status = -1;
@@ -57,16 +57,6 @@ class Users {
         }
     }
 
-    getUserById = async (id) => {
-        try {
-            this.status = 1;
-            const user = userModel.findById(id).populate('courses').lean();
-            return user;
-        } catch (err) {
-            this.status = -1;
-            this.statusMsg = `getUserById: ${err.message}`;
-        }
-    }
 
     updateUser = async (id, data) => {
         try {

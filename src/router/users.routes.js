@@ -26,10 +26,10 @@ const manager = new Users();
     });
 
     userRoutes.post('/', async (req, res) => {
-        const { first_name, last_name, email, gender, password, role } = req.body;
-        if (!first_name || !last_name || !email || !gender || !password || !role) return res.status(400).send({ status: 'ERR', error: 'Se requieren los campos firstName, lastName, password, gender y role' });
+        const { first_name, last_name, user_name, email, gender, password, role } = req.body;
+        if (!first_name || !last_name || !user_name || !email || !gender || !password || !role) return res.status(400).send({ status: 'ERR', error: 'Se requieren los campos firstName, lastName, password, gender y role' });
 
-        const newUser = { first_name: first_name, last_name: last_name, email: email,  gender: gender,password: createHash(password), role: role };
+        const newUser = { first_name: first_name, last_name: last_name, user_name: user_name ,email: email,  gender: gender,password: createHash(password), role: role };
         const result = await manager.addUser(newUser);
         if (!result) return res.status(500).send({ status: 'ERR', error: 'Error interno al agregar usuario' });
         res.status(200).send({ status: 'OK', payload: result });
@@ -119,6 +119,18 @@ const manager = new Users();
             console.error(err);
             return res.status(500).send({ status: "ERR", message: "Internal server error" });
         }
+    })
+
+    userRoutes.delete('/:uid', async (req, res) => {
+        try {
+            const { uid } = req.params;
+            const deletedUser = await manager.deleteUser(uid);
+            res.status(200).send({ status: "OK", message: `Deleted users` });
+          } catch (err) {
+            res
+            .status(500)
+            .send({ status: "ERR", message: "Error interno del servidor." });
+          }
     })
 
 export default userRoutes;

@@ -10,28 +10,28 @@ export default class ProductController {
         return "Producto agregado"
     }
 
-    //async getProducts() {
-    //    try {
-    //        const products = await productModel.find().lean()
-    //        return products
-    //    } catch (err) {
-    //        return err.message
-    //    }
-
-    //}
-    async getProducts(page, query, sort) {
+    async getProducts() {
         try {
-            const products = await productModel.aggregate([
-                { $match: { page: page } },
-                { $match: { type: query } },
-                { $match: { price: sort } }
-            ])
+            const products = await productModel.find().lean()
             return products
+        } catch (err) {
+            return err.message
         }
-        catch (error) {
-            return error.message
-        }
+
     }
+    // async getProducts(page, query, sort) {
+    //     try {
+    //         const products = await productModel.aggregate([
+    //             { $match: { page: page } },
+    //             { $match: { type: query } },
+    //             { $match: { price: sort } }
+    //         ])
+    //         return products
+    //     }
+    //     catch (error) {
+    //         return error.message
+    //     }
+    // }
 
     async getProductById(id) {
         const product = await productModel.findById(id)
@@ -48,11 +48,19 @@ export default class ProductController {
         return procedure
     }
 
-    async getProductsPaginated(offset, limit) {
-        return await productModel.paginate(
-            { stock: 20 },
-            { offset: offset, limit: limit, lean: true }
-        )
+    async getProductsPaginated(params) {
+        try {
+            const productsData = await productModel.paginate({}, params);
+            const plainProducts = productsData.docs.map(doc => doc.toObject());
+
+            return {
+                ...productsData,
+                docs: plainProducts,
+            };
+        } catch (err) {
+            console.error("Error in getProductsPaginated:", err);
+            throw err;
+        }
     }
 
 }

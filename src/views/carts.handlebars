@@ -1,14 +1,60 @@
-<div class="row justify-content-center">
+<body class="bg-success">
 
-    <h1>CARRTITO</h1>
+    <div class="container text-center">
 
-    <div style="background-color: #e1e1e1;">
-        {{#each carts}}
-        <div class="card mb-4">
-            <div class="cart-body">
-                <h5 class="cart-prod">{{this.products}}</h5>
-            </div>
+        <h1 style="margin-bottom: 30px;"><a
+                class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                href="/"><cite>SHOESTORE</cite></a></h1>
+        <h2> <cite>Tu Carrito</cite></h2>
+
+        {{#each cart}}
+        <div class="mb-4" style="margin-top: 32px;">
+            <h3 class="text-lg font-semibold">Producto:{{this.products.pid.title}}</h3>
+            <p class="text-sm text-gray-600">Precio: ${{this.products.pid.price}}</p>
+            <p class="text-sm text-gray-600">Cantidad: {{this.products.qty}}</p>
         </div>
         {{/each}}
+
+        <div class="text-center" style="margin-top: 32px">
+            <a class="btn bg-info-subtle" role="button" onclick="confirmarOrden()">COMPRAR</a>
+        </div>
     </div>
-</div>
+</body>
+
+<script>
+
+    function showToast(message, type) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            close: false,
+            style: {
+                backgroundColor: type === "success" ? "cornflowerblue" : "red",
+            }
+        }).showToast();
+    }
+
+    function confirmarOrden() {
+        var cartId = "{{cartId}}";
+        fetch(`/api/carts/${cartId}/purchase`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    showToast("Tu pedido se realizó con éxito", "success");
+                } else {
+                    showToast("Hubo un problema al realizar tu pedido", "error");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast("Error al realizar el pedido. Tendrás que acercarte a nuestro local.", "error");
+            });
+    }
+</script>

@@ -3,6 +3,7 @@ export class UserDto {
   constructor({
     first_name,
     last_name,
+    user_name,
     email,
     gender,
     password,
@@ -10,6 +11,7 @@ export class UserDto {
   }) {
     this.first_name = first_name
     this.last_name = last_name
+    this.user_name = user_name
     this.email = email
     this.gender = gender
     this.password = password

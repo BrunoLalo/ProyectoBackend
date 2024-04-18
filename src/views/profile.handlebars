@@ -1,0 +1,16 @@
+<body class="bg-success">
+
+    <div class="container text-center">
+        <h1 style="margin-bottom: 30px;"><a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/"><cite>SHOESTORE</cite></a></h1>
+        <h3>PERFIL</h3>
+    </div>
+
+    <h2 class='text-center mb-4'>{{user_name}}</h2>
+    <h2 class='text-center mb-4'>{{role}}</h2>
+
+    <div class="text-center" style="margin-top: 60px">
+        <form action="/api/sessions/logout" method="get">
+            <button type="submit" class="btn btn-danger">Salir</button>
+        </form>
+    </div>
+</body>

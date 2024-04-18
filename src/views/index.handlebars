@@ -1,34 +1,23 @@
-{{!-- <h1>LISTA DE PRODUCTOS</h1>
+<body class="bg-success">
+    <div class="container text-center">
 
-<ul>
-    {{#each products}}
-    <li> {{this.title}} {{this.price}} ({{this.description}})</li>
-    {{/each}}
-</ul> --}}
-<div class="row justify-content-center">
-
-    <h1>LISTA DE PRODUCTOS</h1>
-    
-    <div class="col-md-4 col-xs-12 p-3" style="background-color: #e1e1e1;">
-        {{#each products}}
-        <div class="card mb-4">
-
-            <div class="prod-body">
-                <h5 class="prod-title">{{this.title}}</h5>
-                <p class="prod-text">{{this.description}}</p>
-                <p class="prod-price">{{this.price}}</p>
-                <div style="width: 100%; text-align: right;">
-                    <button class="btn btn-success" onclick="agregar()"><i class="fas fa-cart-plus"></i> Agregar al
-                        carrito</button>
-                </div>
-            </div>
+        <div class="p-3 mb-2 text-emphasis-info">
+            <h1 style="margin-bottom: 30px;"><cite>SHOESTORE</cite></h1>
+            <h3><cite>ELMEJOR SITIO PARA LA COMPRA DE ZAPATILLAS</cite></h3>
         </div>
-        {{/each}}
-    </div>
-</div>
 
-<script>
-    const agregar = () => {
-        console.log("Agregado")
-    }
-</script>
+        <div class="text-center" style="margin-top: 32px">
+            <a class="btn bg-info" href="/login" role="button">Login</a>
+        </div>
+        <div class="text-center" style="margin-top: 32px">
+            <a class="btn bg-info-subtle" href="/products" role="button">Lista de Productos</a>
+        </div>
+        <div class="text-center" style="margin-top: 32px">
+            <a class="btn bg-primary" href="/register" role="button">Registrarse</a>
+        </div>
+        
+
+    <script>
+    </script>
+
+</body>

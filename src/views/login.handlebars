@@ -1,25 +1,41 @@
-<div class="login-container">
-    <h1><b>E-COMMERCE</b></h1>
-    <h2>Login de usuario</h2>
+<body class="bg-success">
+    <style>
+        .login-container {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
 
-    <form action="/api/sessions/login" method="post" style="margin-top: 32px;">
-        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
-            <span class="input-group-text" id="group1"><i class="fa-solid fa-user"></i></span>
-            <input type="text" name="user" class="form-control" placeholder="Nombre" required="required">
-        </div>
 
-        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
-            <span class="input-group-text" id="group2"><i class="fa-solid fa-lock"></i></span>
-            <input type="password" name="pass" class="form-control" required="required">
-        </div>
+    <div class="login-container">
 
-        <div style="margin-bottom: 32px;">
-            <a href="/api/sessions/github">Ingresar con Github</a>
-        </div>
+        <h1 style="margin-bottom: 30px;"><a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/"> <cite>SHOESTORE</cite></a></h1>
+        <h3>LOGIN DE USUARIO</h3>
 
-        <button type="submit" class="btn btn-success">Ingresar</button>
-    </form>
+        <form class="text-center" action="/api/sessions/login" method="post" style="margin-top: 32px;">
+            <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+                <span class="text-center" id="group1"><i class="fa-solid fa-user"></i></span>
+                <input type="email" name="email" class="form-control" placeholder="Mail de usuario" required="required">
+            </div>
 
-    <p>Olvidaste tu contraseña? Hacé click <a href="/resetPass">aquí</a></p>
-    
-</div>
+            <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+                <span class="text-center" id="group2"><i class="fa-solid fa-lock"></i></span>
+                <input type="password" name="pass" class="form-control" required="required" placeholder="Contraseña" required="required">
+            </div>
+            <button type="submit" class="btn btn-info">Ingresar</button>
+
+            <div style="margin-top: 32px; margin-bottom: 32px">
+                <a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"  href="/api/sessions/github">Ingresar con Github</a>
+            </div>
+
+        </form>
+
+        <p>Olvidaste tu contraseña? Hacé click <a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/resetPass">aquí</a></p>
+
+        <p>No tienes cuenta? Hacé click <a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"  href="/register">aquí</a></p>
+        
+
+    </div>
+</body>
+

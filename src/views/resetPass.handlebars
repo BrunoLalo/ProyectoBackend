@@ -1,9 +1,35 @@
-<h1>Reestablecer contraseña</h1>
-<form action="/resetpassword" method="post">
-  <label for="email">email</label>
-  <input type="email" name="email" placeholder="email"><br>
-  <label for="password">password</label>
-  <input name="password" type="password" placeholder="password"><br>
-  <button type="submit">Reestablecer contraseña!</button>
-</form>
-<p>Volvé a intentar el <a href="/login">login</a>.</p>
+<body class="bg-success">
+
+  <style>
+    .login-container {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+  </style>
+
+
+  <div class="login-container">
+
+    <h1 style="margin-bottom: 30px;"><a
+        class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/">
+        <cite>SHOESTORE</cite></a></h1>
+    <h3>RESTABLECER CONTRASEÑA</h3>
+
+    <form class="text-center" action="/resetPass" method="post" style="margin-top: 32px;">
+
+      <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+        <span class="text-center" id="group1"><i class="fa-solid fa-user"></i></span>
+        <input type="email" name="email" class="form-control" placeholder="Email" value="{{email}}"><br>
+      </div>
+
+      <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+        <span class="text-center" id="group1"><i class="fa-solid fa-user"></i></span>
+        <input name="password" type="password" class="form-control" placeholder="Contraseña" value="{{password}}"><br>
+      </div>
+
+      <button class="btn btn-info" style="margin-bottom: 32px;" type="submit">Reestablecer contraseña!</button>
+    </form>
+    <p>Volvé a intentar el <a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/login">login</a>.</p>
+  </div>
+</body>

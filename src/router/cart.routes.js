@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import CartController from '../dao/controllers/cart.controller.mdb.js'
+import cartModel from '../dao/models/cart.model.js'
 
 const cartRouter = Router()
 const cart = new CartController()
@@ -24,7 +25,6 @@ cartRouter.get("/:cid/purchase", async (req, res) => {
   });
 
 cartRouter.post('/', async (req, res) => {
-
     const products_array = req.body;
 
     if (!Array.isArray(products_array.products)) {

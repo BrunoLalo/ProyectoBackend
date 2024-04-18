@@ -43,15 +43,22 @@ sessionRouter.get('/', async (req, res) => {
 });
 
 sessionRouter.get('/failedRegister', (req, res) => {
-  res.send('No se pudo completar el proceso, el usuario ya se encuentra registrado');
+  res.send('No se pudo completar el proceso');
 });
 
 sessionRouter.get('/failedLogin', (req, res) => {
-  res.send('No se pudo completar el login, la clave es incorrecta');
+  res.send('No se pudo completar el login');
 });
 
-sessionRouter.get('/current', passport.authenticate('current', { session: false }), async (req, res) => {
-  res.send({ status: 'OK', data: req.user });
+sessionRouter.get("/current", (req, res) => {
+  if (req.user) {
+    const user = req.user;
+    res
+      .status(200)
+      .send({ status: "OK", message: "Inicio de sesión exitoso", user });
+  } else {
+    res.redirect("/login");
+  }
 });
 
 sessionRouter.get('/private', async (req, res) => {
@@ -67,36 +74,25 @@ sessionRouter.get('/logout', async (req, res) => {
 
   req.logout((err) => {
     if (err) { return next(err); }
-    res.redirect('/api/sessions/session_home');
+    res.redirect('/login');
   });
 });
 
-sessionRouter.post(
-  "/register", passport.authenticate("registerAuth", {
-    failureRedirect: "/api/sessions/failedregister"
-  }),
-  async (req, res) => {
-    try {
-      res.status(200).send({ status: "OK", data: "Usuario registrado" });
-    } catch (err) {
-      res.status(500).send({ status: "ERR", data: err.message });
-    }
-  }
-);
 
 sessionRouter.post('/login', async (req, res) => {
   try {
     const { email, pass } = req.body;
 
-    const userInDb = await usersModel.findOne({ email: email });
+    const userInDb = await userModel.findOne({ email: email });
 
     if (userInDb !== null) {
       if (isValidPassword(userInDb, pass)) {
         req.session.user = { username: email, admin: true };
-        res.redirect("/profile");
+        res.redirect("/api/sessions/current");
       }
     } else {
-      res.status(401).send({ status: "ERR", data: "Datos no válidos" });
+      res.redirect('/register')
+      // res.status(401).send({ status: "ERR", data: "Datos no válidos" });
     }
   } catch (err) {
     res.status(500).send({ status: "ERR", data: err.message });
@@ -113,7 +109,7 @@ sessionRouter.get(
   "/githubcallback",
   passport.authenticate("githubAuth", { failureRedirect: "/login" }),
   async (req, res) => {
-    req.session.user = { username: req.user.email, admin: true };
+    req.session.user = { username: req.user.user_name, admin: true };
     res.redirect("/profile");
   }
 );

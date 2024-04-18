@@ -1,6 +1,7 @@
 import { Router } from 'express'
 // import ProductManager from '../dao/controllers/ProductManager.fs.js'
 import ProductController from '../dao/controllers/product.controller.mdb.js'
+import { uploader } from '../uploader.js'
 
 
 // const manager = new ProductManager()
@@ -9,20 +10,10 @@ const controller = new ProductController()
 const productRouter = Router()
 
 productRouter.get('/', async (req, res) => {
-    const limit = parseInt(req.query.limit)
-    const page = parseInt(req.query.page)
-    const type= parseInt(req.query.query)
-    const sort = req.query.sort
-
-
-    if (!limit || !page || !type || !sort) {
-        return res.send(await controller.getProducts())
-    }
 
     const products = await controller.getProducts()
-    const productslimit = products.slice(0, limit)
 
-    res.status(200).send(productslimit)
+    res.status(200).send(products)
 })
 
 productRouter.get('/:pid', async (req, res) => {
@@ -37,17 +28,55 @@ productRouter.get('/:pid', async (req, res) => {
     res.status(200).send(productId)
 })
 
-productRouter.post("/", async (req, res) => {
-    const newproduct = req.body
-    res.status(200).send(await controller.addProducts(newproduct))
-})
+productRouter.post("/", uploader.single("thumbnail"), async (req, res) => {
+    try {
+        if (!req.file)
+          return res
+            .status(400)
+            .send({ status: "FIL", data: "No se pudo subir el archivo" });
+    
+        const { title, description, price, code, stock } = req.body;
+        if (!title || !description || !price || !code || !stock) {
+          return res
+            .status(400)
+            .send({ status: "ERR", data: "Faltan campos obligatorios" });
+        }
+    
+        const newContent = {
+          title,
+          description,
+          price,
+          thumbnail: req.file.filename,
+          code,
+          stock,
+        };
+    
+        const result = await controller.addProducts(newContent);
+    
+        res.status(200).send({ status: "OK", data: result });
+      } catch (err) {
+        res.status(500).send({ status: "ERR", data: err.message });
+      }
+    });
 
-productRouter.put("/:pid", async (req, res) => {
-    const pid = req.params.pid
-    let updateProduct = req.body
-
-    res.status(200).send(await controller.updateProduct(pid, updateProduct))
-})
+productRouter.put("/:pid", uploader.single("thumbnail"),async (req, res) => {
+    try {
+        if (!req.file) {
+          delete req.body.thumbnail;
+        } else {
+          req.body.thumbnail = req.file.filename;
+        }
+    
+        const updatedProduct = await controller.updateProduct(
+          req.params.pid,
+          req.body
+        );
+    
+        res.status(200).send({ status: "OK", data: updatedProduct });
+      } catch (err) {
+        res.status(500).send({ status: "ERR", data: err.message });
+      }
+    });
 
 
 productRouter.delete("/:pid", async (req, res) => {
@@ -58,7 +87,9 @@ productRouter.delete("/:pid", async (req, res) => {
 
 productRouter.get('/paginated', async (req, res) => {
     try {
-        const products = await controller.getProductsPaginated()
+        const page = req.query.page || 1
+      const limit = req.query.limit || 25
+        const products = await controller.getProductsPaginated({ page, limit })
         res.status(200).send({ status: 'success', payload: products })
         
     } catch (error) {
