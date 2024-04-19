@@ -20,6 +20,6 @@ export const MODE = process.env.MODE
 export const GITHUB_AUTH = {
   clientId: process.env.GITHUB_AUTH_CLIENT_ID,
   clientSecret: process.env.GITHUB_AUTH_CLIENT_SECRET,
-  callbackUrl: `http://localhost:${process.env.PORT}/api/sessions/githubcallback`,
+  callbackUrl: `http://localhost:8080/api/sessions/githubcallback`,
 }
 

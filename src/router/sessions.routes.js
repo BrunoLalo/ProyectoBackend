@@ -109,7 +109,7 @@ sessionRouter.get(
   "/githubcallback",
   passport.authenticate("githubAuth", { failureRedirect: "/login" }),
   async (req, res) => {
-    req.session.user = { username: req.user.user_name, admin: true };
+    req.session.user = { username: req.user.username, admin: true };
     res.redirect("/profile");
   }
 );

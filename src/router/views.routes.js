@@ -89,8 +89,7 @@ router.get("/cart", async (req, res) => {
         console.log(cartAct)
         const ticket = await ticketModel.findOne({ purchaser: cartAct.user_name }).lean().exec();
 
-
-        res.render('carts', {
+        return res.render('carts', {
             title: "Carrito",
             cart: cartAct,
             cartId: cartActId,

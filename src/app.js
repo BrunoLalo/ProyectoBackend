@@ -26,7 +26,6 @@ import { loggerTest } from './services/loggerTest.js'
 
 const app = express()
 
-
 const swaggerOptions = {
     definition: {
       openapi: '3.0.1',
@@ -77,7 +76,10 @@ logger.info(`Base de Datos Conectada "${MONGO_URL}"`)
 app.get('/loggerTest', loggerTest)
 
 
-app.engine("handlebars", handlebars.engine());
+app.engine("handlebars", handlebars.engine({runtimeOptions: {
+  allowProtoPropertiesByDefault: true,
+  allowProtoMethodsByDefault: true
+}}));
 app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
 

@@ -80,7 +80,7 @@ export default class CartController {
 
     getCartById= async (params) => {
         try {
-            const cart = await cartModel.find({user_name: params}).populate({path:'products', populate:{path:'pid', model:'products'}})
+            const cart = await cartModel.find({user_name: params}).populate({path:'products', populate:{path:'pid', model:'products'}}).lean()
             this.status = 1
             this.statusMsg = 'Carrito recuperado'
             return cart;

@@ -41,17 +41,14 @@ const initPassport = async () => {
 
   const verifyGithub = async (accessToken, refreshToken, profile, done) => {
     try {
-      const user = await userModel
-        .findOne({ email: profile._json.email })
-        .lean();
+      const user = await userModel.findOne({ email: profile._json.company }).lean();
 
       if (!user) {
-        const name_parts = profile._json.name.split(" ");
         const newUser = {
-          first_name: name_parts[0],
-          last_name: name_parts[1],
-          user_name: profile.json.username,
-          email: profile._json.email,
+          first_name: profile._json.name,
+          last_name: '',
+          user_name:'',
+          email: profile._json.company,
           gender: "NA",
           password: " ",
         };

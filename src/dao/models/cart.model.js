@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
     products: [{
         pid: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Products',
+            ref: 'products',
             required: true
             },
         qty: {
